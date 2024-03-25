@@ -26,16 +26,6 @@ const tokenCache = {
   },
 }
 
-export {
-  // Catch any errors thrown by the Layout component.
-  ErrorBoundary,
-} from 'expo-router';
-
-export const unstable_settings = {
-  // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: '(tabs)',
-};
-
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
@@ -80,7 +70,6 @@ function RootLayoutNav() {
 
   return (
     <Stack>
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
       <Stack.Screen
         name="(modals)/login"
         options={{
@@ -96,7 +85,8 @@ function RootLayoutNav() {
           )
         }}
       />
-      <Stack.Screen name="listing/[id]" options={{ headerTitle: '' }} />
+      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack.Screen name="listing/[id]" options={{ headerTitle: '', headerTransparent: true }} />
       <Stack.Screen
         name="(modals)/booking"
         options={{
