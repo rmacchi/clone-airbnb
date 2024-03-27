@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {
-  FlatList,
   Image,
   ListRenderItem,
   StyleSheet,
@@ -9,19 +8,31 @@ import {
   View,
 } from "react-native";
 
-import { Listing } from '@/interfaces/listing';
 import { Ionicons } from '@expo/vector-icons';
 import Animated, { FadeInRight, FadeOutLeft } from 'react-native-reanimated';
 import { Link } from 'expo-router';
+import { BottomSheetFlatList, BottomSheetFlatListMethods } from '@gorhom/bottom-sheet';
+import { defaultStyles } from '@/constants/Styles';
 
 interface Props {
   listings: any[];
+  refresh: number;
   category: string;
 }
 
-const Listings = ({ listings: items, category }: Props) => {
-  const [loading, setLoading] = useState(false);
-  const listRef = useRef<FlatList>(null);
+const Listings = ({ listings: items, category, refresh }: Props) => {
+  const listRef = useRef<BottomSheetFlatListMethods>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (refresh) {
+      scrollListTop()
+    }
+  }, [refresh])
+
+  const scrollListTop = () => {
+    listRef.current?.scrollToOffset({ offset: 0, animated: true })
+  }
 
   useEffect(() => {
     setLoading(true)
@@ -31,12 +42,12 @@ const Listings = ({ listings: items, category }: Props) => {
     }, 200)
   }, [category])
 
-  const renderRow: ListRenderItem<Listing> = ({ item }) => (
+  const renderRow: ListRenderItem<any> = ({ item }) => (
     <Link href={`/listing/${item.id}`} asChild>
       <TouchableOpacity>
 
         <Animated.View style={styles.listing} entering={FadeInRight} exiting={FadeOutLeft}>
-          <Image
+          <Animated.Image
             source={{ uri: item.medium_url }}
             style={styles.image}
           />
@@ -50,17 +61,13 @@ const Listings = ({ listings: items, category }: Props) => {
             <Text
               style={{ fontSize: 16, fontFamily: 'mon-sb' }}
             >{item.name}</Text>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
               <Ionicons name="star" size={14} />
               <Text style={{ fontFamily: 'mon', marginStart: 4 }}>{item.review_scores_rating / 20}</Text>
             </View>
           </View>
 
-          <Text
-            style={{ fontFamily: 'mon' }}
-          >
-            {item.room_type}
-          </Text>
+          <Text style={{ fontFamily: 'mon' }}>{item.room_type}</Text>
 
           <View style={{ flexDirection: 'row', gap: 4 }}>
             <Text style={{ fontFamily: 'mon-sb' }}>${item.price}</Text>
@@ -72,18 +79,18 @@ const Listings = ({ listings: items, category }: Props) => {
   )
 
   return (
-    <View style={styles.container}>
-      <FlatList
-        renderItem={renderRow}
+    <View style={defaultStyles.container}>
+      <BottomSheetFlatList
         ref={listRef}
+        renderItem={renderRow}
         data={loading ? [] : items}
+        ListHeaderComponent={<Text style={styles.info}> {items.length} tiny homes</Text>}
       />
     </View>
   )
 }
 
 const styles = StyleSheet.create({
-  container: {},
   listing: {
     padding: 16,
     gap: 10,
@@ -93,6 +100,12 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 300,
     borderRadius: 15,
+  },
+  info: {
+    textAlign: 'center',
+    fontFamily: 'mon-sb',
+    fontSize: 16,
+    marginTop: 4,
   },
 })
 
