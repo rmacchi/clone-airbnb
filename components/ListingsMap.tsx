@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import { defaultStyles } from '@/constants/Styles';
 import { ListingGeo } from '@/interfaces/listingGeo';
 import { useRouter } from 'expo-router';
@@ -17,7 +17,7 @@ const INITIAL_REGION = {
   longitudeDelta: 12,
 };
 
-const ListingsMap = ({ listings }: Props) => {
+const ListingsMap = memo(({ listings }: Props) => {
   const router = useRouter();
 
   const onMarkerSelected = (item: ListingGeo) => {
@@ -83,7 +83,7 @@ const ListingsMap = ({ listings }: Props) => {
       </MapView>
     </View>
   )
-}
+})
 
 
 const styles = StyleSheet.create({
