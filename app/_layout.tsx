@@ -75,7 +75,7 @@ function RootLayoutNav() {
         options={{
           title: 'Log in or sign up',
           headerTitleStyle: {
-            fontFamily: 'mon-sb'
+            fontFamily: 'mon-sb',
           },
           presentation: 'modal',
           headerLeft: () => (
