@@ -23,21 +23,21 @@ const Layout = () => {
       <Tabs.Screen
         name="wishlists"
         options={{
-          tabBarLabel: 'Wishlists',
+          headerShown: false,
           tabBarIcon: ({ color, size }) => <Ionicons name="heart-outline" color={color} size={size} />
         }}
       />
       <Tabs.Screen
         name="trips"
         options={{
-          tabBarLabel: 'Trips',
+          headerShown: false,
           tabBarIcon: ({ color, size }) => <FontAwesome5 name="airbnb" color={color} size={size} />
         }}
       />
       <Tabs.Screen
         name="inbox"
         options={{
-          tabBarLabel: 'Inbox',
+          headerShown: false,
           tabBarIcon: ({ color, size }) => <MaterialCommunityIcons name="message-outline" color={color} size={size} />
         }}
       />
